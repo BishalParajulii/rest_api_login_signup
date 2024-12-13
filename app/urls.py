@@ -1,6 +1,9 @@
 # urls.py
 from django.urls import path
-from .views import UserRegistrationView, OrganizationRegistrationView , UserLoginView , OrganizationLoginView
+
+from .serializers import UserProfileUpdateSerializer
+from .views import UserRegistrationView, OrganizationRegistrationView, UserLoginView, OrganizationLoginView, \
+    UserProfileUpdateView, OrganizationProfileUpdateView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -10,6 +13,8 @@ urlpatterns = [
     path('organization/register/', OrganizationRegistrationView.as_view(), name='organization-register'),
     path('user/login/' , UserLoginView.as_view() , name = 'user-login'),
     path('organization/login/' , OrganizationLoginView.as_view() , name = 'org-login'),
+    path('user/profile/update/' , UserProfileUpdateView.as_view() , name="user-profile-update"),
+    path('organization/profile/update/' , OrganizationProfileUpdateView.as_view() , name="organization-profile-update")
 
 ]
 

@@ -43,3 +43,47 @@ class OrganizationRegistrationSerializer(serializers.ModelSerializer):
         organization = Organization.objects.create(**validated_data)
         return organization
 
+
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=False, min_length=8)
+
+    class Meta:
+        model = User
+        fields = ['name' , 'email' , 'phone_number' , 'blood_group' , 'province' , 'district' , 'password']
+        extra_kwargs = {
+            'email': {'read_only': True},
+            'blood_group': {'read_only':True},
+        }
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password' , None)
+        if password:
+            instance.password = make_password(password)
+
+        for attr , value in validated_data.items():
+            setattr(instance,attr,value)
+
+        instance.save()
+        return instance
+
+
+class OrganizationProfileUpdateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=False, min_length=8)
+
+    class Meta:
+        model = Organization
+        fields = ['name' , 'email'  , 'province' , 'district' , 'password']
+        extra_kwargs = {
+            'email': {'read_only': True},
+        }
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password' , None)
+        if password:
+            instance.password = make_password(password)
+
+        for attr , value in validated_data.items():
+            setattr(instance,attr,value)
+
+        instance.save()
+        return instance
